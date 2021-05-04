@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-deployment
+  labels:
+    app: webserver
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webserver
+  template:
+    metadata:
+      labels:
+        app: webserver
+    spec:
+      containers:
+        - name: darkhttpd
+          image: docker.io/alpinelinux/darkhttpd
+          ports:
+            - containerPort: 8080
+              name: http
+          volumeMounts:
+            - name: content
+              mountPath: /var/www/localhost/htdocs
+      volumes:
+        - name: content
+          configMap:
+            name: oai-web-content
